@@ -1,0 +1,229 @@
+package br.gov.saude.sp.ipgg;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.select.Elements;
+
+import java.io.*;
+
+public class App {
+
+	static String fileDirPath = "/home/wagner/wagnerdocri@gmail.com3/_4_Documentos/_Docs_IPGG/_Pessoais/Carlos";
+	static String fileName = "pdftohtmlOuts.html";
+	static File htmlFile = new File(fileDirPath + "/" + fileName);
+
+	static Document htmlDocument = null;
+	static Element body;
+
+	static FileWriter fw;
+
+	static String dtaIni = "";
+	static String dtaFim = "";
+	static String Emissao = "";
+
+	static String PacPront = "";
+	static String PacNome = "";
+	static String Idade = "";
+	static String Item = "";
+	static String Qtde = "";
+	static String Realizacao = "";
+	static String NumAdminssao = "";
+	static String TpoAdmissao = "";
+	static String Responsavel = "";
+	static String Complemento = "";
+
+	static int ln = 1, pac = 0;
+
+	static boolean pacNovo = true;
+	static boolean pacIdentificado = false;
+	
+	public static void main(String[] args) throws IOException {
+		fileDirPath = "/home/wagner/wagnerdocri@gmail.com3/_4_Documentos/_Docs_IPGG/_Pessoais/Carlos";
+		fileName = "pdftohtmlOuts.html";
+		htmlFile = new File(fileDirPath + "/" + fileName);
+
+		htmlDocument = Jsoup.parse(htmlFile, "UTF-8");
+		body = htmlDocument.body();
+
+		fw = new FileWriter("/home/wagner/wagnerdocri@gmail.com3/_4_Documentos/_Docs_IPGG/_Pessoais/Carlos/dados.csv");
+		// System.out.println(htmlDocument);
+		fw.write(getNomeDasColunas() + "\n");
+		getDataDeReferenciaDoRelatorio();
+		getData(67);
+		fw.close();
+	}
+
+	private static void getDataDeReferenciaDoRelatorio() {
+		int i = 0;
+
+		for (Node node : body.childNodes()) {
+			i++;
+			if (i == 14)
+				dtaIni = node.toString().trim();
+			if (i == 19)
+				dtaFim = node.toString().trim();
+			if (i == 23)
+				Emissao = node.toString().trim();
+		}
+	}
+
+	public static void getData(int no) throws IOException {
+		int i = 0;		
+		
+		for (Node node : body.childNodes()) {
+			i++;
+			
+			int x = (no + (ln-1 == 0 ? 1 * 22 : (ln-1) * 22));
+			System.out.println("i="+i+" | x="+x);
+			
+			if (i == x) {// 89
+				System.out.println((no + 22) + " - " + node.toString().trim());				
+				if (isItAInteger(node.toString().trim())) {
+					pacNovo = false;
+					no = no+18;
+				} else {
+					pacNovo = true;
+					no = i;
+				}						
+			}
+			
+			if (pacNovo) {
+				if (i == no) {
+					PacPront = node.toString().trim();
+					System.out.println(ln + " " + PacPront);
+				}
+				if (i == (no + 2)) {// 69
+					// pac++; aqui comeca os dados do pac
+					// mas so depois que eu coletar todos os dados dele eu faco pac++
+					PacNome = node.toString().replaceAll("&nbsp;", "").trim();
+					System.out.println(ln + " " + PacNome);
+					pacIdentificado = true;
+				}
+			}else {
+				
+			}
+			if( pacIdentificado ) {
+				if(obtemDadosDoPac(i, no, node)) {
+				escreveLinha(ln, pac, dtaIni, dtaFim, Emissao, PacPront, PacNome, Idade, Item, Qtde, Realizacao,
+						NumAdminssao, TpoAdmissao, Responsavel, Complemento);
+				ln++;
+			   }
+		    }			
+		}
+	}
+
+	private static boolean obtemDadosDoPac(int i, int no, Node node) throws IOException {
+		if (i == no) {// 71 89
+			Idade = node.toString().trim();
+			System.out.println(ln + " " + Idade);
+		}
+		if (i == (no + 2)) {// 73 91
+			Item = node.toString().trim();
+			System.out.println(ln + " " + Item);
+		}				
+		if (i == (no + 4)) {// 75 93
+			Qtde = node.toString().trim();
+			System.out.println(ln + " " + Qtde);
+		}
+		if (i == (no + 6)) {// 77 97
+			Realizacao = node.toString().trim();
+			System.out.println(ln + " " + Realizacao);
+		}
+		if (i == (no + 8)) {// 79 97
+			NumAdminssao = node.toString().trim();
+			System.out.println(ln + " " + NumAdminssao);
+		}
+		if (i == (no + 10)) {// 81 99
+			TpoAdmissao = node.toString().replaceAll("&nbsp;", "-").trim();
+			System.out.println(ln + " " + TpoAdmissao);
+		}
+		if (i == (no + 12)) {// 83 101
+			Responsavel = node.toString().trim();
+			System.out.println(i + " " + ln + " " + Responsavel);
+		}
+		if (i == (no + 16)) {// 87 105
+			Complemento = node.toString().trim();
+			System.out.println(i + " " + ln + " " + Complemento);
+			return true;
+		}
+		return false;
+	}
+
+	private static void obtemDadosPacNovo(int i, int no, Node node) throws IOException {	
+//			if (i == (no + (ln * 4))) {// 71 89
+//				Idade = node.toString().trim();
+//				System.out.println(ln + " " + Idade);
+//			}
+//			if (i == (no + (ln * 6))) {// 73 91
+//				Item = node.toString().trim();
+//				System.out.println(ln + " " + Item);
+//			}
+//			if (i == (no + (ln * 8))) {// 75 93
+//				Qtde = node.toString().trim();
+//				System.out.println(ln + " " + Qtde);
+//			}
+//			if (i == (no + (ln * 10))) {// 77 95
+//				Realizacao = node.toString().trim();
+//				System.out.println(ln + " " + Realizacao);
+//			}
+//			if (i == (no + (ln * 12))) {// 79 97
+//				NumAdminssao = node.toString().trim();
+//				System.out.println(ln + " " + NumAdminssao);
+//			}
+//			if (i == (no + (ln * 14))) {// 81 99
+//				TpoAdmissao = node.toString().replaceAll("&nbsp;", "-").trim();
+//				System.out.println(ln + " " + TpoAdmissao);
+//			}
+//			if (i == (no + (ln * 16))) {// 83 101
+//				Responsavel = node.toString().trim();
+//				System.out.println(i + " " + ln + " " + Responsavel);
+//			}
+//			if (i == (no + (ln * 20))) {// 87 105
+//				Complemento = node.toString().trim();
+//				System.out.println(i + " " + ln + " " + Complemento);
+//			}
+	}
+
+	private static boolean isItAInteger(String s) {
+		try {
+			Integer.parseInt(s);
+		} catch (NumberFormatException e) {
+			return false;
+		} catch (NullPointerException e) {
+			return false;
+		}
+		return true;
+	}
+
+	private static void escreveLinha(int ln, int pac, String dtaIni, String dtaFim, String emissao, String PacPront,
+			String pacNome, String Idade, String Item, String Qtde, String Realizacao, String NumAdminssao,
+			String TpoAdmissao, String Responsavel, String Complemento) throws IOException {
+		fw.write(ln + ";" + pac + ";" + dtaIni + ";" + dtaFim + ";" + emissao + ";" + PacPront + ";" + pacNome + ";"
+				+ Idade + ";" + Item + ";" + Qtde + ";" + Realizacao + ";" + NumAdminssao + ";" + TpoAdmissao + ";"
+				+ Responsavel + ";" + Complemento + "\n");
+	}
+
+	public static String getNomeDasColunas() {
+		// html body b
+		// html body b
+		// Referencia body > b:nth-child(8)
+		// RefIni body > br:nth-child(9)
+		// RefFim body > br:nth-child(12)
+		// Emissao body > b:nth-child(14)
+
+		// PacPront body > b:nth-child(27)
+		// PacNome
+
+		// Idade body > b:nth-child(29)
+		// Item body > b:nth-child(31)
+		// Qtde body > b:nth-child(33)
+		// Realizacao body > b:nth-child(35)
+		// NumAdminssao body > b:nth-child(37)
+		// TpoAdmissao body > b:nth-child(39)
+		// Responsavel body > b:nth-child(41)
+		// Complemento body > b:nth-child(52)
+		return ("ln;pac;dtaIni;dtaFim;emissao;PacPront;pacNome;Idade;Item;Qtde;Realizacao;NumAdminssao;TpoAdmissao;Responsavel;Complemento");
+	}
+}

@@ -1,0 +1,10 @@
+#esses arquivos pdftohtmlOuts sao exportacoes com dados reais que a gente nao quer comitar
+**/**/pdftohtmlOuts_*
+target
+.settings
+#*
+~*
+*~
+.project
+.classpath
+

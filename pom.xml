@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>br.gov.saude.sp.ipgg</groupId>
+  <artifactId>dataFromS4Reports</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <name>dataFromS4Reports</name>
+  <!-- FIXME change it to the project's website -->
+  <url>http://www.example.com</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+    <junit.jupiter.version>5.2.0</junit.jupiter.version>
+    <junit.platform.version>1.2.0</junit.platform.version>
+  </properties>
+  
+  <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>1.11.3</version>
+    </dependency>
+
+
+    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.6</version>
+    </dependency>
+
+    <!--
+        TESTS
+        https://github.com/junit-team/junit5-samples/blob/r5.2.0/junit5-jupiter-starter-maven/pom.xml
+        https://www.petrikainulainen.net/programming/testing/junit-5-tutorial-running-unit-tests-with-maven/
+    -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.1.0-M1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.1.0</version>
+        </plugin>
+        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.0.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <!--
+          <version>3.8.0</version>
+          -->
+          <version>3.7.0</version>
+	  <configuration>
+	    <source>${java.version}</source>
+	    <target>${java.version}</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <!--
+          <version>2.22.1</version>
+          -->
+          <version>2.21.0</version>
+          <dependencies>
+            <dependency>
+	      <groupId>org.junit.platform</groupId>
+	      <artifactId>junit-platform-surefire-provider</artifactId>
+	      <version>${junit.platform.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
+          <configuration>
+	    <archive>
+	      <manifest>
+                <addClasspath>true</addClasspath>
+                <!--                    
+                    libs/ 
+                    Class-Path: libs/jsoup-1.11.3.jar
+                -->
+                <classpathPrefix>libs/</classpathPrefix>
+                
+                <!--
+                <Class-Path>libs</Class-Path>
+                -->
+		<mainClass>br.gov.saude.sp.ipgg.App</mainClass>
+	      </manifest>
+	    </archive>
+	  </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.7.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.6.0</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>exec</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <executable>java</executable>
+            <workingDirectory>target</workingDirectory>
+            <arguments>
+              <argument>-jar</argument>
+              <argument>${project.build.finalName}.jar</argument>
+            </arguments>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <!--
+          https://maven.apache.org/plugins/maven-dependency-plugin/
+          http://people.apache.org/~aramirez/maven-dependency-plugin/usage.html
+          I don't know but this plugin must be out of
+          pluginmanagment tag to work
+          https://stackoverflow.com/questions/9847340/maven-dependency-plugin-unpack-not-being-executed-during-phase
+      -->
+      <plugin>
+	<artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+	<executions>
+	  <execution>
+            <id>copy dependencies</id>
+	    <phase>process-sources</phase>
+	    <goals>
+	      <goal>copy-dependencies</goal>
+	    </goals>
+	    <configuration>                
+	      <outputDirectory>${project.basedir}/target/libs</outputDirectory>                
+	    </configuration>
+	  </execution>
+	</executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

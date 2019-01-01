@@ -1,0 +1,36 @@
+#+Title: Obtem Dados de Relatórios pdf do S4
+
+* Motivação
+  O S4 é um software muito bom para área da saúde, mas nem sempre os
+  relatórios são os que a gestão precisa e também nem sempre, pra não
+  dizer, quase sempre, a extração de dados permite exportar pra csv os
+  dados de interesse
+
+* Alternativa
+  A alternativa é gerar relatórios pdf e pegar os dados de lá.
+  Pra isso, o que foi possível, até o momento, fazer é transformar o
+  relatório em html, que é uma estrutura mais tranquila pra se
+  trabalhar e depois extrair os dados
+  
+* Como isso acontece
+  Tem um comando do linux que é o pdftohtml que faz a conversao do pdf
+  pra html
+  Pra disponibilizar esse comando tem que fazer a seguinte instalação
+
+  #+NAME: dnf install  poppler-utils
+  #+BEGIN_SRC sh
+  dnf install  poppler-utils
+  #+END_SRC
+  
+  Dependendo da sua distribuição linux aí o camando vai mudar.
+
+  Depois a conversão é desse jeito...
+  #+NAME pdftohtml document-AnalitAlfabeGeriatria.pdf pdftohtmlOut.html
+  #+BEGIN_SRC sh
+  pdftohtml document-AnalitAlfabeGeriatria.pdf pdftohtmlOut.html
+  #+END_SRC
+
+  De posso do documento html dá pra fazer a extração...
+  E depois que vc extrai aí dá pra fazer muitas coisas legais, tipo
+  salvar em csv ou num banco de dados mesmo
+  
