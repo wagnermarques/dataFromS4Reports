@@ -1,8 +1,8 @@
 #+Title: Algoritmo para extracao de Dados de Relatórios pdf do S4
 
-#+BEGIN_SRC html
+
  <img src="https://api.travis-ci.org/wagnermarques/datafromS4Reports.svg?branch=master"></img>
-#+END_SRC
+
 
 * Motivação
   O S4 é um software muito bom para área da saúde, mas nem sempre os
