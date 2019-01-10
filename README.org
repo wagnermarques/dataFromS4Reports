@@ -1,7 +1,6 @@
 #+Title: Algoritmo para extracao de Dados de Relatórios pdf do S4
 
-
- <img src="https://api.travis-ci.org/wagnermarques/datafromS4Reports.svg?branch=master"></img>
+[[https://api.travis-ci.org/wagnermarques/datafromS4Reports.svg?branch=master]]
 
 
 * Motivação
