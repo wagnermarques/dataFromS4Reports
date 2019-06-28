@@ -1,49 +1,48 @@
-#+Title: Algoritmo para extracao de Dados de RelatÛrios pdf do S4
+#+Title: Algoritmo para extracao de Dados de Relat√≥rios pdf do S4
 
 [[https://api.travis-ci.org/wagnermarques/datafromS4Reports.svg?branch=master]]
 
 
-* MotivaÁ„o
-  O S4 È um software muito bom para ·rea da sa˙de, mas nem sempre os
-  relatÛrios s„o os que a gest„o precisa e tambÈm nem sempre, pra n„o
-  dizer quase sempre, a extraÁ„o de dados permite exportar pra csv os
-  dados de interesse.
+* Motiva√ß√£o
+  O S4 √© um software muito bom para √°rea da sa√∫de, mas nem sempre os
+  relat√≥rios s√£o os que a gest√£o precisa a funcionalidade de extra√ß√£o de dados pra csv os
+n√£o est√° funcionando no momento.
 
 * Alternativa
-  A alternativa È gerar relatÛrios pdf e pegar os dados de l·.
-  Pra isso, o que foi possÌvel, atÈ o momento, fazer È transformar o
-  relatÛrio em html, que È uma estrutura mais tranquila pra se
+  A alternativa √© gerar relat√≥rios pdf e pegar os dados de l√°.
+  Pra isso, o que foi poss√≠vel fazer, at√© o momento, √© transformar o
+  relat√≥rio em html, que √© uma estrutura mais tranquila pra se
   trabalhar e depois extrair os dados em csv os quais podem ser
   abertos facilmente em excel ou importandos para banco de dados.
   
 * Como isso acontece
-  Tem um comando do linux que È o pdftohtml que faz a conversao do pdf
+  Tem um comando do linux que √© o pdftohtml que faz a conversao do pdf
   pra html
-  Pra disponibilizar esse comando tem que fazer a seguinte instalaÁ„o.
+  Pra disponibilizar esse comando tem que fazer a seguinte instala√ß√£o.
 
   #+NAME: dnf install  poppler-utils
   #+BEGIN_SRC sh
   dnf install  poppler-utils
   #+END_SRC
   
-  Dependendo da sua distribuiÁ„o linux aÌ o camando vai mudar o
+  Dependendo da sua distribui√ß√£o linux a√≠ o camando vai mudar o
   comando, de acordo.
 
-  Depois a convers„o È desse jeito...
+  Depois a convers√£o √© desse jeito...
   #+NAME pdftohtml document-AnalitAlfabeGeriatria.pdf pdftohtmlOut.html
   #+BEGIN_SRC sh
   pdftohtml document-AnalitAlfabeGeriatria.pdf pdftohtmlOut.html
   #+END_SRC
 
-  De poss2 do documento html d· pra fazer a extraÁ„o...
+  De poss2 do documento html d√° pra fazer a extra√ß√£o...
 
-* Est·gio atual
-  Por enquanto È possÌvel apenas extrair dados do relatÛrio de
-  produÁ„o analÌtico alfabÈtico.
+* Est√°gio atual
+  Por enquanto √© poss√≠vel apenas extrair dados do relat√≥rio de
+  produ√ß√£o anal√≠tico alfab√©tico.
   
-  Os prÛximos passos podem ser j· fazer a importaÁ„o dos dados no
-  banco de dados, mas tem alguma dificuldade com relaÁ„o a integridade
-  referencial dos dados e tambÈm com relaÁ„o ao n„o repetiÁ„o da
-  inserÁ„o de dados por relatÛrios repetidos.
+  Os pr√≥ximos passos podem ser j√° fazer a importa√ß√£o dos dados no
+  banco de dados, mas tem alguma dificuldade com rela√ß√£o a integridade
+  referencial dos dados e tamb√©m com rela√ß√£o ao n√£o repeti√ß√£o da
+  inser√ß√£o de dados por relat√≥rios repetidos.
 
 
